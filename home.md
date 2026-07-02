@@ -96,3 +96,4 @@ curl "http://localhost:37050/api/home/packages"
 > 📌 首页五个区块状态：
 > - Banner / 生活场景 / 精选案例 / 整装套餐：✅ C 端接口已全部完成
 > - 功能入口金刚区：前端写死（4 个入口），无需后端接口
+> - 小程序端已对接：✅ `GET /api/home/banners` · `GET /api/home/scenes` · `GET /api/home/featured` · `GET /api/home/packages`

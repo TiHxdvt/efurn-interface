@@ -34,7 +34,7 @@
 | `name` | String | 否 | 场景名（客厅/主卧等） |
 | `image` | String | 否 | 等距矩形全景图 URL |
 | `isDefault` | Boolean | 否 | 是否默认场景 |
-| `order` | Integer | 否 | 排序号 |
+| `sortOrder` | Integer | 否 | 排序号 |
 
 ---
 
@@ -76,8 +76,8 @@ curl "http://localhost:37050/api/vr?page=1&pageSize=10&enabled=true"
         "id": 1, "name": "北欧极简客厅 89㎡",
         "tags": ["北欧", "极简", "客厅"],
         "scenes": [
-          { "id": 1, "name": "客厅", "image": "https://...", "isDefault": true, "order": 1 },
-          { "id": 2, "name": "阳台", "image": "https://...", "isDefault": false, "order": 2 }
+          { "id": 1, "name": "客厅", "image": "https://...", "isDefault": true, "sortOrder": 1 },
+          { "id": 2, "name": "阳台", "image": "https://...", "isDefault": false, "sortOrder": 2 }
         ],
         "url": "/vr-viewer/1", "coverThumb": "https://...",
         "sort": 0, "enabled": true, "remark": "样板间",
@@ -164,4 +164,4 @@ curl -X DELETE http://localhost:37050/api/vr/1
 | 5 | PUT | `/api/vr/{id}` | 修改（scenes 整体替换） |
 | 6 | DELETE | `/api/vr/{id}` | 逻辑删除（主表 + 场景） |
 
-> 📋 待开发（小程序端）：`GET /api/vr/list`、`GET /api/vr/detail/{id}`（C 端展示型，只返回启用项）
+> 📋 小程序端文档：[vr-c.md](./vr-c.md)

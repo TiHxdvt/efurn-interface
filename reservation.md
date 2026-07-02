@@ -156,3 +156,4 @@ curl -H "X-User-Id: 1" "http://localhost:37050/api/my-reservations"
 | 小程序 | 6 | GET | `/api/my-reservations` | 我的预约 |
 
 > 📋 待对接：小程序登录态 token → 自动解析 `wechatUserId`（当前用 `X-User-Id` 头联调）
+> - 小程序端已对接：✅ `POST /api/reservation` · `GET /api/my-reservations`

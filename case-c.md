@@ -107,3 +107,4 @@ curl "http://localhost:37050/api/cases/1"
 | 2 | GET | `/api/cases/{id}` | 详情（content + images + panoramaId） |
 
 > 📋 关联：首页精选案例用 `/api/home/featured`（前 6），本接口是完整列表/详情页。
+> - 小程序端已对接：✅ `GET /api/cases` · `GET /api/cases/{id}`
