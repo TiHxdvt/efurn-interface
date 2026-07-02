@@ -1739,6 +1739,48 @@
           }
         }
       ]
+    },
+    {
+      "name": "业主小程序首页 Home",
+      "description": "C端首页聚合，仅上线数据，字段 title/image",
+      "item": [
+        {
+          "name": "1. 首页 Banner",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/home/banners",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "home",
+                "banners"
+              ]
+            }
+          }
+        },
+        {
+          "name": "2. 首页生活场景",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/home/scenes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "home",
+                "scenes"
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }
