@@ -1817,6 +1817,59 @@
           }
         }
       ]
+    },
+    {
+      "name": "案例 C端",
+      "description": "业主小程序案例列表/详情（/api/cases）",
+      "item": [
+        {
+          "name": "1. 案例列表",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cases",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cases"
+              ],
+              "query": [
+                {
+                  "key": "style",
+                  "value": "",
+                  "description": "风格筛选"
+                },
+                {
+                  "key": "area",
+                  "value": "",
+                  "description": "面积筛选"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "2. 案例详情",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cases/{{caseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cases",
+                "{{caseId}}"
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }
