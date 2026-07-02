@@ -224,12 +224,12 @@
       "name": "生活场景 Scene",
       "item": [
         {
-          "name": "1. 分页查询",
+          "name": "1. 列表",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/scene?page=1&pageSize=10&sortBy=likes&order=desc",
+              "raw": "{{baseUrl}}/api/scene",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -263,7 +263,43 @@
           }
         },
         {
-          "name": "2. 新增",
+          "name": "2. 字典 options",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/scene/options",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "scene",
+                "options"
+              ]
+            }
+          }
+        },
+        {
+          "name": "3. 详情",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/scene/{{sceneId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "scene",
+                "{{sceneId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "4. 新增",
           "request": {
             "method": "POST",
             "header": [
@@ -289,7 +325,7 @@
           }
         },
         {
-          "name": "3. 修改",
+          "name": "5. 修改",
           "request": {
             "method": "PUT",
             "header": [
@@ -300,7 +336,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"安静阅读角(改)\",\n  \"cover\": \"https://x/s.jpg\",\n  \"sort\": 5,\n  \"enabled\": true\n}"
+              "raw": "{\n  \"sort\": 5,\n  \"enabled\": false\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/scene/{{sceneId}}",
@@ -316,7 +352,7 @@
           }
         },
         {
-          "name": "4. 删除",
+          "name": "6. 删除",
           "request": {
             "method": "DELETE",
             "header": [],
