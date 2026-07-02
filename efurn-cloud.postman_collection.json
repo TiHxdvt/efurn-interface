@@ -15,7 +15,9 @@
     { "key": "caseId", "value": "1", "description": "案例 id" },
     { "key": "packageId", "value": "1", "description": "套餐 id" },
     { "key": "brandId", "value": "4", "description": "品牌版本 id（默认 4=draft，便于测 mark-current/update）" },
-    { "key": "reservationId", "value": "1", "description": "预约记录 id" }
+    { "key": "reservationId", "value": "1", "description": "预约记录 id" },
+    { "key": "leadId", "value": "4", "description": "线索 id（默认 4=pending，便于测跟进/convert）" },
+    { "key": "followId", "value": "1", "description": "跟进记录 id" }
   ],
   "item": [
     {
@@ -290,6 +292,70 @@
           "name": "小程序-2. 我的预约",
           "request": { "method": "GET", "header": [{"key":"X-User-Id","value":"1"}],
             "url": { "raw": "{{baseUrl}}/api/my-reservations", "host": ["{{baseUrl}}"], "path": ["api","my-reservations"] } } }
+      ]
+    },
+    {
+      "name": "线索 Lead",
+      "description": "线索+动作+跟进子表+转客户。状态 pending/following/converted/lost。业务码 1001手机号重复/1002已是客户/1003终态/1004必填/404",
+      "item": [
+        {
+          "name": "0. 字典 options",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/lead/options", "host": ["{{baseUrl}}"], "path": ["api","lead","options"] } } },
+        {
+          "name": "1. 列表",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/lead?page=1&pageSize=10&status=pending", "host": ["{{baseUrl}}"], "path": ["api","lead"],
+              "query": [ {"key":"page","value":"1"}, {"key":"pageSize","value":"10"}, {"key":"name","value":""}, {"key":"phone","value":""}, {"key":"status","value":"pending"}, {"key":"source","value":""}, {"key":"assignedTo","value":""} ] } } },
+        {
+          "name": "2. 详情",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/lead/{{leadId}}", "host": ["{{baseUrl}}"], "path": ["api","lead","{{leadId}}"] } } },
+        {
+          "name": "3. 新增",
+          "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"周杰\",\n  \"phone\": \"13900138099\",\n  \"source\": \"manual\",\n  \"assignedTo\": \"刘销售\",\n  \"remark\": \"朋友转介绍\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/lead", "host": ["{{baseUrl}}"], "path": ["api","lead"] },
+            "description": "phone 跨线索+客户唯一→1001；manual 自动插动作" } },
+        {
+          "name": "4. 编辑",
+          "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"remark\": \"已联系，约周末到店\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/lead/{{leadId}}", "host": ["{{baseUrl}}"], "path": ["api","lead","{{leadId}}"] },
+            "description": "终态(converted/lost)→1003" } },
+        {
+          "name": "5. 删除",
+          "request": { "method": "DELETE", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/lead/{{leadId}}", "host": ["{{baseUrl}}"], "path": ["api","lead","{{leadId}}"] } } },
+        {
+          "name": "6. 动作列表",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/lead/{{leadId}}/actions", "host": ["{{baseUrl}}"], "path": ["api","lead","{{leadId}}","actions"] } } },
+        {
+          "name": "7. 跟进列表",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/lead/{{leadId}}/follows", "host": ["{{baseUrl}}"], "path": ["api","lead","{{leadId}}","follows"] } } },
+        {
+          "name": "8. 新增跟进",
+          "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"content\": \"电话沟通，约周末到店\",\n  \"channel\": \"phone\",\n  \"nextFollowAt\": \"2026-07-05 10:00:00\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/lead/{{leadId}}/follows", "host": ["{{baseUrl}}"], "path": ["api","lead","{{leadId}}","follows"] },
+            "description": "副作用：lastFollowedAt 更新，pending→following" } },
+        {
+          "name": "9. 编辑跟进",
+          "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"content\": \"改：电话沟通\",\n  \"channel\": \"phone\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/lead/{{leadId}}/follows/{{followId}}", "host": ["{{baseUrl}}"], "path": ["api","lead","{{leadId}}","follows","{{followId}}"] } } },
+        {
+          "name": "10. 删除跟进",
+          "request": { "method": "DELETE", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/lead/{{leadId}}/follows/{{followId}}", "host": ["{{baseUrl}}"], "path": ["api","lead","{{leadId}}","follows","{{followId}}"] } } },
+        {
+          "name": "11. 转客户",
+          "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"province\": \"SH\",\n  \"city\": \"SH\",\n  \"region\": \"Pudong\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/lead/{{leadId}}/convert", "host": ["{{baseUrl}}"], "path": ["api","lead","{{leadId}}","convert"] },
+            "description": "事务：写 customer_info + lead converted。返回 {lead, customer}。终态→1003，手机号已是客户→1002" } }
       ]
     }
   ]
