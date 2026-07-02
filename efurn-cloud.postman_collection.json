@@ -1779,6 +1779,24 @@
               ]
             }
           }
+        },
+        {
+          "name": "3. 精选案例",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/home/featured",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "home",
+                "featured"
+              ]
+            }
+          }
         }
       ]
     }

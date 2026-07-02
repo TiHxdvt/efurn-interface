@@ -15,6 +15,8 @@
 | `id` | Long | 否 | 主键 |
 | `name` | String | 否 | 案例名称（应用层唯一，1-50 字） |
 | `cover` | String | 否 | 主图地址 |
+| `style` | String | 是 | 风格（如 现代轻奢/新中式） |
+| `area` | String | 是 | 面积（如 150㎡） |
 | `tags` | String[] | 否 | 标签数组，1-5 项，每项 1-10 字 |
 | `description` | String | 否 | 介绍（≤100 字） |
 | `content` | String | 否 | 图文详情（富文本 HTML，去标签后非空） |
