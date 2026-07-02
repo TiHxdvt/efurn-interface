@@ -13,7 +13,8 @@
     { "key": "qid", "value": "1", "description": "需求梳理题目 id" },
     { "key": "vrId", "value": "1", "description": "VR 全景 id" },
     { "key": "caseId", "value": "1", "description": "案例 id" },
-    { "key": "packageId", "value": "1", "description": "套餐 id" }
+    { "key": "packageId", "value": "1", "description": "套餐 id" },
+    { "key": "brandId", "value": "4", "description": "品牌版本 id（默认 4=draft，便于测 mark-current/update）" }
   ],
   "item": [
     {
@@ -217,6 +218,43 @@
           "name": "5. 删除",
           "request": { "method": "DELETE", "header": [],
             "url": { "raw": "{{baseUrl}}/api/package/{{packageId}}", "host": ["{{baseUrl}}"], "path": ["api","package","{{packageId}}"] } } }
+      ]
+    },
+    {
+      "name": "品牌介绍 Brand",
+      "description": "版本状态机 draft/current/archived，全表仅1条current。业务码：1400 必填 / 1401 已是current / 1402 current不可删 / 1403 仅draft可改 / 1404 不存在",
+      "item": [
+        {
+          "name": "1. 列表",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/brand/list?page=1&pageSize=10&status=all&sortBy=updatedAt&sortOrder=desc", "host": ["{{baseUrl}}"], "path": ["api","brand","list"],
+              "query": [ {"key":"page","value":"1"}, {"key":"pageSize","value":"10"}, {"key":"keyword","value":"","description":"模糊 title/summary"}, {"key":"status","value":"all","description":"all/current/draft/archived"}, {"key":"sortBy","value":"updatedAt"}, {"key":"sortOrder","value":"desc"} ] } } },
+        {
+          "name": "2. 详情",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/brand/detail/{{brandId}}", "host": ["{{baseUrl}}"], "path": ["api","brand","detail","{{brandId}}"] } } },
+        {
+          "name": "3. 新增(默认draft)",
+          "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"新版品牌故事\",\n  \"summary\": \"2026 品牌升级\",\n  \"content\": \"<h2>品牌故事</h2><p>内容</p>\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/brand", "host": ["{{baseUrl}}"], "path": ["api","brand"] },
+            "description": "version/status/isCurrent 后端自动生成（version 末位+1, status=draft）。三字段空→1400" } },
+        {
+          "name": "4. 标记为当前(mark-current)",
+          "request": { "method": "POST", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/brand/{{brandId}}/mark-current", "host": ["{{baseUrl}}"], "path": ["api","brand","{{brandId}}","mark-current"] },
+            "description": "事务：目标升 current，原 current 降 archived。已是current→1401" } },
+        {
+          "name": "5. 修改(仅draft)",
+          "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"新版品牌故事(改)\",\n  \"summary\": \"2026 升级\",\n  \"content\": \"<p>改后内容</p>\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/brand/{{brandId}}", "host": ["{{baseUrl}}"], "path": ["api","brand","{{brandId}}"] },
+            "description": "非 draft→1403" } },
+        {
+          "name": "6. 删除(current不可删)",
+          "request": { "method": "DELETE", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/brand/{{brandId}}", "host": ["{{baseUrl}}"], "path": ["api","brand","{{brandId}}"] },
+            "description": "current→1402" } }
       ]
     }
   ]
