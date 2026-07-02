@@ -14,7 +14,8 @@
     { "key": "vrId", "value": "1", "description": "VR 全景 id" },
     { "key": "caseId", "value": "1", "description": "案例 id" },
     { "key": "packageId", "value": "1", "description": "套餐 id" },
-    { "key": "brandId", "value": "4", "description": "品牌版本 id（默认 4=draft，便于测 mark-current/update）" }
+    { "key": "brandId", "value": "4", "description": "品牌版本 id（默认 4=draft，便于测 mark-current/update）" },
+    { "key": "reservationId", "value": "1", "description": "预约记录 id" }
   ],
   "item": [
     {
@@ -255,6 +256,40 @@
           "request": { "method": "DELETE", "header": [],
             "url": { "raw": "{{baseUrl}}/api/brand/{{brandId}}", "host": ["{{baseUrl}}"], "path": ["api","brand","{{brandId}}"] },
             "description": "current→1402" } }
+      ]
+    },
+    {
+      "name": "预约记录 Reservation",
+      "description": "PC管理(list/detail/status/delete) + 小程序(submit/my-reservations)。status: pending/contacted/measured",
+      "item": [
+        {
+          "name": "PC-1. 列表",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/reservation?page=1&pageSize=10&status=pending", "host": ["{{baseUrl}}"], "path": ["api","reservation"],
+              "query": [ {"key":"page","value":"1"}, {"key":"pageSize","value":"10"}, {"key":"name","value":""}, {"key":"phone","value":""}, {"key":"status","value":"pending"} ] } } },
+        {
+          "name": "PC-2. 详情",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/reservation/{{reservationId}}", "host": ["{{baseUrl}}"], "path": ["api","reservation","{{reservationId}}"] } } },
+        {
+          "name": "PC-3. 更新状态",
+          "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"contacted\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/reservation/{{reservationId}}/status", "host": ["{{baseUrl}}"], "path": ["api","reservation","{{reservationId}}","status"] },
+            "description": "status 仅 pending/contacted/measured，非法→1400" } },
+        {
+          "name": "PC-4. 删除",
+          "request": { "method": "DELETE", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/reservation/{{reservationId}}", "host": ["{{baseUrl}}"], "path": ["api","reservation","{{reservationId}}"] } } },
+        {
+          "name": "小程序-1. 提交预约",
+          "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"},{"key":"X-User-Id","value":"1","description":"登录态关联，可空"}],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"张先生\",\n  \"phone\": \"13800138001\",\n  \"rooms\": { \"shi\": 3, \"ting\": 2, \"wei\": 1, \"chu\": 1 },\n  \"area\": 150,\n  \"budget\": \"20-30万\",\n  \"remark\": \"希望使用环保材料\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/reservation", "host": ["{{baseUrl}}"], "path": ["api","reservation"] } } },
+        {
+          "name": "小程序-2. 我的预约",
+          "request": { "method": "GET", "header": [{"key":"X-User-Id","value":"1"}],
+            "url": { "raw": "{{baseUrl}}/api/my-reservations", "host": ["{{baseUrl}}"], "path": ["api","my-reservations"] } } }
       ]
     }
   ]
