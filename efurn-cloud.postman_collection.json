@@ -1,0 +1,223 @@
+{
+  "info": {
+    "name": "efurn-cloud",
+    "_postman_id": "efurn-cloud-2026-07-01-v4",
+    "description": "云廷家装管理系统 - 接口集合（v4）\n\n## 响应约定\n- 统一 { code, data, message }，code === 0 成功\n- 分页 data: { list, total, page, pageSize }\n- 业务错误码：1001 唯一冲突 / 1002 必填(VR)或外键(需求梳理) / 1004 场景校验 / 1005 标签校验 / 1006 排序非法 / 404 不存在\n\n## 鉴权\n- baseUrl 默认 http://localhost:37056（直连 wechat，免 token）\n- 走网关改 http://localhost:37050 + Header Authorization: Bearer <token>",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:37056" },
+    { "key": "bannerId", "value": "1" },
+    { "key": "sceneId", "value": "1" },
+    { "key": "catId", "value": "1", "description": "需求梳理分类 id" },
+    { "key": "qid", "value": "1", "description": "需求梳理题目 id" },
+    { "key": "vrId", "value": "1", "description": "VR 全景 id" },
+    { "key": "caseId", "value": "1", "description": "案例 id" },
+    { "key": "packageId", "value": "1", "description": "套餐 id" }
+  ],
+  "item": [
+    {
+      "name": "首页 Banner",
+      "item": [
+        {
+          "name": "1. 分页查询",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/banner?page=1&pageSize=10&enabled=true&sortBy=sort&order=asc", "host": ["{{baseUrl}}"], "path": ["api","banner"],
+              "query": [ {"key":"page","value":"1"}, {"key":"pageSize","value":"10"}, {"key":"name","value":""}, {"key":"enabled","value":"true"}, {"key":"sortBy","value":"sort"}, {"key":"order","value":"asc"} ] } } },
+        {
+          "name": "2. 新增",
+          "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"新活动 Banner\",\n  \"cover\": \"https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&h=450&fit=crop\",\n  \"link\": \"/pages/package-1/index\",\n  \"sort\": 5,\n  \"enabled\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/api/banner", "host": ["{{baseUrl}}"], "path": ["api","banner"] } } },
+        {
+          "name": "3. 修改",
+          "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"新活动(改)\",\n  \"cover\": \"https://x/a.jpg\",\n  \"sort\": 5,\n  \"enabled\": false\n}" },
+            "url": { "raw": "{{baseUrl}}/api/banner/{{bannerId}}", "host": ["{{baseUrl}}"], "path": ["api","banner","{{bannerId}}"] } } },
+        {
+          "name": "4. 删除",
+          "request": { "method": "DELETE", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/banner/{{bannerId}}", "host": ["{{baseUrl}}"], "path": ["api","banner","{{bannerId}}"] } } }
+      ]
+    },
+    {
+      "name": "生活场景 Scene",
+      "item": [
+        {
+          "name": "1. 分页查询",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/scene?page=1&pageSize=10&sortBy=likes&order=desc", "host": ["{{baseUrl}}"], "path": ["api","scene"],
+              "query": [ {"key":"page","value":"1"}, {"key":"pageSize","value":"10"}, {"key":"name","value":""}, {"key":"sortBy","value":"likes"}, {"key":"order","value":"desc"} ] } } },
+        {
+          "name": "2. 新增",
+          "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"安静阅读角\",\n  \"cover\": \"https://x/s.jpg\",\n  \"sort\": 5,\n  \"enabled\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/api/scene", "host": ["{{baseUrl}}"], "path": ["api","scene"] } } },
+        {
+          "name": "3. 修改",
+          "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"安静阅读角(改)\",\n  \"cover\": \"https://x/s.jpg\",\n  \"sort\": 5,\n  \"enabled\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/api/scene/{{sceneId}}", "host": ["{{baseUrl}}"], "path": ["api","scene","{{sceneId}}"] } } },
+        {
+          "name": "4. 删除",
+          "request": { "method": "DELETE", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/scene/{{sceneId}}", "host": ["{{baseUrl}}"], "path": ["api","scene","{{sceneId}}"] } } }
+      ]
+    },
+    {
+      "name": "需求梳理 Requirement",
+      "description": "分类→题目→选项 两层一对多。业务码：1001 唯一 / 1002 外键 / 1005 级联 / 1006 排序 / 404",
+      "item": [
+        {
+          "name": "0. 字典 options",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/requirement/options", "host": ["{{baseUrl}}"], "path": ["api","requirement","options"] } } },
+        {
+          "name": "分类-1. 列表",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/requirement/categories?page=1&pageSize=999", "host": ["{{baseUrl}}"], "path": ["api","requirement","categories"],
+              "query": [ {"key":"page","value":"1"}, {"key":"pageSize","value":"999"}, {"key":"name","value":""}, {"key":"stepNumber","value":""} ] } } },
+        {
+          "name": "分类-2. 新增",
+          "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"基础信息\",\n  \"stepNumber\": 1,\n  \"description\": \"房屋基础信息\",\n  \"order\": 1\n}" },
+            "url": { "raw": "{{baseUrl}}/api/requirement/categories", "host": ["{{baseUrl}}"], "path": ["api","requirement","categories"] } } },
+        {
+          "name": "分类-3. 修改",
+          "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"基础信息(改)\",\n  \"stepNumber\": 1,\n  \"order\": 1\n}" },
+            "url": { "raw": "{{baseUrl}}/api/requirement/categories/{{catId}}", "host": ["{{baseUrl}}"], "path": ["api","requirement","categories","{{catId}}"] } } },
+        {
+          "name": "分类-4. 删除",
+          "request": { "method": "DELETE", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/requirement/categories/{{catId}}", "host": ["{{baseUrl}}"], "path": ["api","requirement","categories","{{catId}}"] } } },
+        {
+          "name": "题目-1. 列表",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/requirement/questions?page=1&pageSize=20&categoryId={{catId}}", "host": ["{{baseUrl}}"], "path": ["api","requirement","questions"],
+              "query": [ {"key":"page","value":"1"}, {"key":"pageSize","value":"20"}, {"key":"categoryId","value":"{{catId}}"} ] } } },
+        {
+          "name": "题目-2. 新增",
+          "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"questionId\": \"q_test_1\",\n  \"categoryId\": {{catId}},\n  \"questionText\": \"测试题目？\",\n  \"questionType\": \"single\",\n  \"required\": true,\n  \"order\": 99,\n  \"config\": {}\n}" },
+            "url": { "raw": "{{baseUrl}}/api/requirement/questions", "host": ["{{baseUrl}}"], "path": ["api","requirement","questions"] } } },
+        {
+          "name": "题目-3. 修改",
+          "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"questionText\": \"测试题目(改)\",\n  \"questionType\": \"multi\",\n  \"config\": { \"maxSelect\": 3 }\n}" },
+            "url": { "raw": "{{baseUrl}}/api/requirement/questions/{{qid}}", "host": ["{{baseUrl}}"], "path": ["api","requirement","questions","{{qid}}"] } } },
+        {
+          "name": "题目-4. 删除",
+          "request": { "method": "DELETE", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/requirement/questions/{{qid}}", "host": ["{{baseUrl}}"], "path": ["api","requirement","questions","{{qid}}"] } } },
+        {
+          "name": "选项-1. 列表",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/requirement/questions/{{qid}}/options", "host": ["{{baseUrl}}"], "path": ["api","requirement","questions","{{qid}}","options"] } } },
+        {
+          "name": "选项-2. 批量替换",
+          "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"options\": [\n    { \"value\": \"opt_a\", \"label\": \"选项A\", \"order\": 1 },\n    { \"value\": \"other\", \"label\": \"其他\", \"allowCustom\": true, \"order\": 2 }\n  ]\n}" },
+            "url": { "raw": "{{baseUrl}}/api/requirement/questions/{{qid}}/options", "host": ["{{baseUrl}}"], "path": ["api","requirement","questions","{{qid}}","options"] } } }
+      ]
+    },
+    {
+      "name": "VR全景 VR",
+      "description": "主表+场景子表。url 后端生成。业务码：1001 名称重复 / 1002 名称必填 / 1004 场景校验 / 1005 标签校验 / 404",
+      "item": [
+        {
+          "name": "1. 列表",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/vr?page=1&pageSize=10&enabled=true", "host": ["{{baseUrl}}"], "path": ["api","vr"],
+              "query": [ {"key":"page","value":"1"}, {"key":"pageSize","value":"10"}, {"key":"name","value":""}, {"key":"enabled","value":"true"}, {"key":"remark","value":""} ] } } },
+        {
+          "name": "2. 字典 options",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/vr/options", "host": ["{{baseUrl}}"], "path": ["api","vr","options"] } } },
+        {
+          "name": "3. 详情",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/vr/{{vrId}}", "host": ["{{baseUrl}}"], "path": ["api","vr","{{vrId}}"] } } },
+        {
+          "name": "4. 新增",
+          "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"现代轻奢客厅\",\n  \"tags\": [\"现代\", \"轻奢\", \"客厅\"],\n  \"scenes\": [\n    { \"name\": \"客厅\", \"image\": \"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=2048&h=1024&fit=crop\", \"isDefault\": true },\n    { \"name\": \"阳台\", \"image\": \"https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=2048&h=1024&fit=crop\", \"isDefault\": false }\n  ],\n  \"sort\": 0,\n  \"enabled\": true,\n  \"remark\": \"样板间\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/vr", "host": ["{{baseUrl}}"], "path": ["api","vr"] },
+            "description": "url 后端自动生成，无需传。name 重复→1001；场景无默认→1004；标签不合法→1005" } },
+        {
+          "name": "5. 修改",
+          "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"remark\": \"样板间(改)\",\n  \"scenes\": [\n    { \"name\": \"客厅\", \"image\": \"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=2048&h=1024&fit=crop\", \"isDefault\": true }\n  ]\n}" },
+            "url": { "raw": "{{baseUrl}}/api/vr/{{vrId}}", "host": ["{{baseUrl}}"], "path": ["api","vr","{{vrId}}"] },
+            "description": "scenes 传则整体替换；url 不可改" } },
+        {
+          "name": "6. 删除",
+          "request": { "method": "DELETE", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/vr/{{vrId}}", "host": ["{{baseUrl}}"], "path": ["api","vr","{{vrId}}"] } } }
+      ]
+    },
+    {
+      "name": "案例 Case",
+      "description": "单表 CRUD + 富文本 content。业务码：1001 名称重复 / 1002 名称 / 1003 主图 / 1004 图文详情 / 1005 标签 / 1006 介绍 / 404",
+      "item": [
+        {
+          "name": "1. 列表",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/case?page=1&pageSize=10&enabled=true", "host": ["{{baseUrl}}"], "path": ["api","case"],
+              "query": [ {"key":"page","value":"1"}, {"key":"pageSize","value":"10"}, {"key":"name","value":""}, {"key":"enabled","value":"true"} ] } } },
+        {
+          "name": "2. 字典 options",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/case/options", "host": ["{{baseUrl}}"], "path": ["api","case","options"] } } },
+        {
+          "name": "3. 详情",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/case/{{caseId}}", "host": ["{{baseUrl}}"], "path": ["api","case","{{caseId}}"] } } },
+        {
+          "name": "4. 新增",
+          "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"翡翠湾 150㎡ 现代轻奢\",\n  \"cover\": \"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=750&q=80\",\n  \"tags\": [\"现代\", \"轻奢\", \"大户型\"],\n  \"description\": \"本案以现代轻奢为主题，融合金属、大理石、丝绒等材质。\",\n  \"content\": \"<p><strong>设计理念：</strong>现代轻奢。</p>\",\n  \"sort\": 0,\n  \"enabled\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/api/case", "host": ["{{baseUrl}}"], "path": ["api","case"] },
+            "description": "校验顺序：cover(1003)→name(1002)→tags(1005)→description(1006)→content(1004)→name唯一(1001)" } },
+        {
+          "name": "5. 修改",
+          "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"sort\": 5,\n  \"enabled\": false\n}" },
+            "url": { "raw": "{{baseUrl}}/api/case/{{caseId}}", "host": ["{{baseUrl}}"], "path": ["api","case","{{caseId}}"] } } },
+        {
+          "name": "6. 删除",
+          "request": { "method": "DELETE", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/case/{{caseId}}", "host": ["{{baseUrl}}"], "path": ["api","case","{{caseId}}"] } } }
+      ]
+    },
+    {
+      "name": "整装套餐 Package",
+      "description": "单表+富文本。路径特殊：/list、/detail/{id}。业务码 1404 不存在",
+      "item": [
+        {
+          "name": "1. 列表",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/package/list?page=1&pageSize=10&keyword=&bookable=&sortField=sort&sortOrder=asc", "host": ["{{baseUrl}}"], "path": ["api","package","list"],
+              "query": [ {"key":"page","value":"1"}, {"key":"pageSize","value":"10"}, {"key":"keyword","value":"","description":"模糊 name/tier/subtitle"}, {"key":"bookable","value":""}, {"key":"sortField","value":"sort","description":"sort/price/createdAt"}, {"key":"sortOrder","value":"asc"} ] } } },
+        {
+          "name": "2. 详情",
+          "request": { "method": "GET", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/package/detail/{{packageId}}", "host": ["{{baseUrl}}"], "path": ["api","package","detail","{{packageId}}"] } } },
+        {
+          "name": "3. 新增",
+          "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"精奢整装套餐\",\n  \"tier\": \"尊享套餐\",\n  \"cover\": \"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=450&fit=crop\",\n  \"price\": 299999,\n  \"subtitle\": \"一线品牌·全屋定制·拎包入住\",\n  \"content\": \"<h2>套餐亮点</h2><p>主材：诺贝尔/圣象</p>\",\n  \"bookable\": true,\n  \"sort\": 10\n}" },
+            "url": { "raw": "{{baseUrl}}/api/package", "host": ["{{baseUrl}}"], "path": ["api","package"] } } },
+        {
+          "name": "4. 修改",
+          "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}],
+            "body": { "mode": "raw", "raw": "{\n  \"price\": 288888,\n  \"bookable\": false\n}" },
+            "url": { "raw": "{{baseUrl}}/api/package/{{packageId}}", "host": ["{{baseUrl}}"], "path": ["api","package","{{packageId}}"] } } },
+        {
+          "name": "5. 删除",
+          "request": { "method": "DELETE", "header": [],
+            "url": { "raw": "{{baseUrl}}/api/package/{{packageId}}", "host": ["{{baseUrl}}"], "path": ["api","package","{{packageId}}"] } } }
+      ]
+    }
+  ]
+}
