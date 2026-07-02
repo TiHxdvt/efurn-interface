@@ -1797,6 +1797,24 @@
               ]
             }
           }
+        },
+        {
+          "name": "4. 整装套餐",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/home/packages",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "home",
+                "packages"
+              ]
+            }
+          }
         }
       ]
     }

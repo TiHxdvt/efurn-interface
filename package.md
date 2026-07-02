@@ -18,6 +18,7 @@
 | `tier` | String | 否 | 档位（尊享套餐/悦享套餐等） |
 | `price` | Long | 否 | 价格（整数） |
 | `subtitle` | String | 是 | 副标题 |
+| `tags` | String[] | 是 | 标签数组 |
 | `content` | String | 是 | 图文详情（富文本 HTML，用 `<h2>` 分块：套餐亮点/全包包含/合作品牌） |
 | `bookable` | Boolean | 否 | 是否展示「立即预约」按钮 |
 | `sort` | Integer | 否 | 排序号，默认 0 |

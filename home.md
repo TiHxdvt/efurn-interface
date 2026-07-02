@@ -42,14 +42,29 @@ curl "http://localhost:37050/api/home/featured"
 ```json
 {
   "code": 0,
+  "data": [ { "id": 1, "title": "翡翠湾 150㎡ 现代轻奢", "cover": "https://x/c.jpg", "style": "现代轻奢", "area": "150㎡", "tags": ["现代","轻奢"] } ],
+  "message": null
+}
+```
+
+### 4. 首页整装套餐 `GET /api/home/packages`
+
+按 `sort` 升序，**最多 3 个**。字段 `label/name/price(千分位)/tags/bgImage`。
+
+```bash
+curl "http://localhost:37050/api/home/packages"
+```
+```json
+{
+  "code": 0,
   "data": [
     {
       "id": 1,
-      "title": "翡翠湾 150㎡ 现代轻奢",
-      "cover": "https://x/c1.jpg",
-      "style": "现代轻奢",
-      "area": "150㎡",
-      "tags": ["现代", "轻奢", "大户型"]
+      "label": "尊享套餐",
+      "name": "精奢整装套餐",
+      "price": "299,999",
+      "tags": ["一线品牌", "全屋定制", "拎包入住"],
+      "bgImage": "https://x/p.jpg"
     }
   ],
   "message": null
@@ -60,12 +75,12 @@ curl "http://localhost:37050/api/home/featured"
 
 | 字段 | 类型 | 说明 |
 |---|---|---|
-| `id` | Long | 案例 id |
-| `title` | String | 标题（= 后台 Case.name） |
-| `cover` | String | 主图（= 后台 Case.cover） |
-| `style` | String | 风格（如 现代轻奢） |
-| `area` | String | 面积（如 150㎡） |
+| `id` | Long | 套餐 id |
+| `label` | String | 档位标签（= 后台 Package.tier，如「尊享套餐」） |
+| `name` | String | 套餐名称 |
+| `price` | String | 价格千分位字符串（299999 → `299,999`） |
 | `tags` | String[] | 标签 |
+| `bgImage` | String | 卡片背景图（= 后台 Package.cover） |
 
 ---
 
@@ -76,8 +91,8 @@ curl "http://localhost:37050/api/home/featured"
 | 1 | GET | `/api/home/banners` | 首页 Banner（仅上线） |
 | 2 | GET | `/api/home/scenes` | 首页生活场景（仅上线 + likes/dislikes） |
 | 3 | GET | `/api/home/featured` | 精选案例（仅上线，最多 6 个） |
+| 4 | GET | `/api/home/packages` | 整装套餐（最多 3 个） |
 
-> 📋 首页其它区块：
-> - **功能入口金刚区**：前端写死，无需接口
-> - **整装套餐**：待开发 `GET /api/home/packages`（最多 3 个）
-> - **场景点赞**：待开发 `POST /api/scene/{id}/vote`
+> 📌 首页五个区块状态：
+> - Banner / 生活场景 / 精选案例 / 整装套餐：✅ C 端接口已全部完成
+> - 功能入口金刚区：前端写死（4 个入口），无需后端接口
