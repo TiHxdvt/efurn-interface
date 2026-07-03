@@ -1,8 +1,8 @@
 {
   "info": {
     "name": "efurn-cloud",
-    "_postman_id": "efurn-cloud-2026-07-01-v4",
-    "description": "云廷家装管理系统 - 接口集合（v4）\n\n## 响应约定\n- 统一 { code, data, message }，code === 0 成功\n- 分页 data: { list, total, page, pageSize }\n- 业务错误码：1001 唯一冲突 / 1002 必填(VR)或外键(需求梳理) / 1004 场景校验 / 1005 标签校验 / 1006 排序非法 / 404 不存在\n\n## 鉴权\n- baseUrl 默认 http://localhost:37056（直连 wechat，免 token）\n- 走网关改 http://localhost:37050 + Header Authorization: Bearer <token>",
+    "_postman_id": "efurn-cloud-2026-07-01-v5",
+    "description": "云廷家装管理系统 - 接口集合（v5）\n\n## 响应约定\n- 统一 { code, data, message }，code === 0 成功\n- 分页 data: { list, total, page, pageSize }\n- 业务错误码：1001 唯一冲突 / 1002 必填(VR)或外键(需求梳理) / 1004 场景校验 / 1005 标签校验 / 1006 排序非法 / 404 不存在\n\n## 鉴权\n- baseUrl 默认 http://localhost:37056（直连 wechat，免 token）\n- 走网关改 http://localhost:37050 + Header Authorization: Bearer <token>",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -62,6 +62,11 @@
       "key": "followId",
       "value": "1",
       "description": "跟进记录 id"
+    },
+    {
+      "key": "resultId",
+      "value": "1",
+      "description": "需求测评答卷 id"
     }
   ],
   "item": [
@@ -1865,6 +1870,153 @@
                 "api",
                 "cases",
                 "{{caseId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "VR 样板间 C端",
+      "item": [
+        {
+          "name": "1. VR 样板间列表",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vr/list",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "vr", "list"]
+            }
+          }
+        },
+        {
+          "name": "2. VR 样板间详情",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vr/detail/{{vrId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "vr", "detail", "{{vrId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "需求梳理 C端",
+      "item": [
+        {
+          "name": "1. 全量题目配置",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requirement/config",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requirement", "config"]
+            }
+          }
+        },
+        {
+          "name": "2. 提交答卷",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answers\": {\n    \"q1_renovation_type\": \"rough_new\",\n    \"q2_area\": \"100_120\",\n    \"q3_layout\": \"three_two\",\n    \"q5_location\": \"北京市朝阳区\",\n    \"q6_members\": [\"couple\"],\n    \"q12_living_room\": [\"social\", \"relax\"],\n    \"q20_main_style\": \"light_luxury\",\n    \"q29_ac\": \"central\",\n    \"q34_total_budget\": \"20_30w\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/requirement/submit",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requirement", "submit"]
+            }
+          }
+        },
+        {
+          "name": "3. 我的答卷列表",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requirement/results",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requirement", "results"]
+            }
+          }
+        },
+        {
+          "name": "4. 答卷详情",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requirement/results/{{resultId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requirement", "results", "{{resultId}}"]
+            }
+          }
+        },
+        {
+          "name": "5. 删除答卷",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requirement/results/{{resultId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requirement", "results", "{{resultId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "微信用户",
+      "item": [
+        {
+          "name": "1. 微信登录",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/wx-user/login?code=TEST_LOGIN_CODE",
+              "host": ["{{baseUrl}}"],
+              "path": ["wx-user", "login"],
+              "query": [
+                { "key": "code", "value": "TEST_LOGIN_CODE" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "2. 微信回调",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/wx-user/callback",
+              "host": ["{{baseUrl}}"],
+              "path": ["wx-user", "callback"]
+            }
+          }
+        },
+        {
+          "name": "3. 用户登出",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/wx-user/auth/logout?userId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["wx-user", "auth", "logout"],
+              "query": [
+                { "key": "userId", "value": "1" }
               ]
             }
           }
