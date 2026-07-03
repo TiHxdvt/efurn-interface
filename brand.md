@@ -143,15 +143,39 @@ curl -X PUT http://localhost:37050/api/brand/4 -H "Content-Type: application/jso
 curl -X DELETE http://localhost:37050/api/brand/4
 ```
 
-## 接口清单（6 个）
+## 接口清单（7 个）
 
-| # | 方法 | 路径 | 功能 |
-|---|---|---|---|
-| 1 | GET | `/api/brand/list` | 列表（keyword + status + 通用排序） |
-| 2 | GET | `/api/brand/detail/{id}` | 详情 |
-| 3 | POST | `/api/brand` | 新增（draft，自动 version） |
-| 4 | PUT | `/api/brand/{id}` | 修改（仅 draft） |
-| 5 | DELETE | `/api/brand/{id}` | 删除（current 不可删） |
-| 6 | POST | `/api/brand/{id}/mark-current` | 标记当前（事务，原 current 降级） |
+| 端 | # | 方法 | 路径 | 功能 |
+|---|---|---|---|---|
+| C 端 | 1 | GET | `/api/brand/current` | 当前使用版本（status=current） |
+| PC | 2 | GET | `/api/brand/list` | 列表（keyword + status + 通用排序） |
+| PC | 3 | GET | `/api/brand/detail/{id}` | 详情 |
+| PC | 4 | POST | `/api/brand` | 新增（draft，自动 version） |
+| PC | 5 | PUT | `/api/brand/{id}` | 修改（仅 draft） |
+| PC | 6 | DELETE | `/api/brand/{id}` | 删除（current 不可删） |
+| PC | 7 | POST | `/api/brand/{id}/mark-current` | 标记当前（事务，原 current 降级） |
 
-> 📋 待开发（小程序端）：`GET /api/brand/current`（返回当前 current 版本）
+### C 端：获取当前版本 `GET /api/brand/current`
+
+返回 `status=current` 的唯一版本。无 current 版本 → `code=-1`。
+
+```bash
+curl "http://localhost:37050/api/brand/current"
+```
+
+响应：
+```json
+{
+  "code": 0,
+  "data": {
+    "id": 3, "version": "v1.2", "title": "服务体系 - 四大承诺",
+    "summary": "推出四大承诺",
+    "content": "<h2>四大承诺</h2><ol>...</ol>",
+    "status": "current", "isCurrent": true, "createdBy": "admin",
+    "createdAt": "2026-07-02T09:50:00", "updatedAt": "2026-07-02T09:50:00"
+  },
+  "message": null
+}
+```
+
+> 📋 小程序端已对接：✅ `GET /api/brand/current`（品牌介绍页）

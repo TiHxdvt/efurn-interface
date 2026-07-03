@@ -1115,6 +1115,24 @@
       "description": "版本状态机 draft/current/archived，全表仅1条current。业务码：1400 必填 / 1401 已是current / 1402 current不可删 / 1403 仅draft可改 / 1404 不存在",
       "item": [
         {
+          "name": "0. 当前版本（C端）",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/brand/current",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "brand",
+                "current"
+              ]
+            }
+          }
+        },
+        {
           "name": "1. 列表",
           "request": {
             "method": "GET",
@@ -1886,8 +1904,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/vr/list",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "vr", "list"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vr",
+                "list"
+              ]
             }
           }
         },
@@ -1898,8 +1922,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/vr/detail/{{vrId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "vr", "detail", "{{vrId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vr",
+                "detail",
+                "{{vrId}}"
+              ]
             }
           }
         }
@@ -1915,8 +1946,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/requirement/config",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "requirement", "config"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requirement",
+                "config"
+              ]
             }
           }
         },
@@ -1925,7 +1962,10 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -1933,8 +1973,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/requirement/submit",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "requirement", "submit"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requirement",
+                "submit"
+              ]
             }
           }
         },
@@ -1945,8 +1991,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/requirement/results",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "requirement", "results"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requirement",
+                "results"
+              ]
             }
           }
         },
@@ -1957,8 +2009,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/requirement/results/{{resultId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "requirement", "results", "{{resultId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requirement",
+                "results",
+                "{{resultId}}"
+              ]
             }
           }
         },
@@ -1969,8 +2028,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/requirement/results/{{resultId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "requirement", "results", "{{resultId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requirement",
+                "results",
+                "{{resultId}}"
+              ]
             }
           }
         }
@@ -1986,10 +2052,18 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/wx-user/login?code=TEST_LOGIN_CODE",
-              "host": ["{{baseUrl}}"],
-              "path": ["wx-user", "login"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wx-user",
+                "login"
+              ],
               "query": [
-                { "key": "code", "value": "TEST_LOGIN_CODE" }
+                {
+                  "key": "code",
+                  "value": "TEST_LOGIN_CODE"
+                }
               ]
             }
           }
@@ -2001,8 +2075,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/wx-user/callback",
-              "host": ["{{baseUrl}}"],
-              "path": ["wx-user", "callback"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wx-user",
+                "callback"
+              ]
             }
           }
         },
@@ -2013,10 +2092,19 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/wx-user/auth/logout?userId=1",
-              "host": ["{{baseUrl}}"],
-              "path": ["wx-user", "auth", "logout"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wx-user",
+                "auth",
+                "logout"
+              ],
               "query": [
-                { "key": "userId", "value": "1" }
+                {
+                  "key": "userId",
+                  "value": "1"
+                }
               ]
             }
           }
