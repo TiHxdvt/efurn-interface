@@ -133,4 +133,4 @@ curl -X DELETE http://localhost:37050/api/package/1
 | 4 | PUT | `/api/package/{id}` | 修改 |
 | 5 | DELETE | `/api/package/{id}` | 逻辑删除 |
 
-> 📋 待开发（小程序端）：`GET /api/package/home`（首页最多 3 个）、`GET /api/package/detail/{id}`（C 端）
+> 📋 小程序端已对接：✅ `GET /api/package/detail/{id}`（套餐详情页）+ `GET /api/home/packages`（首页卡片）

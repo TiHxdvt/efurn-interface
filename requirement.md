@@ -265,4 +265,4 @@ curl -X PUT http://localhost:37050/api/requirement/questions/1/options -H "Conte
 | 选项 | 13 | GET | `/api/requirement/questions/{qid}/options` | 列表 |
 |  | 14 | PUT | `/api/requirement/questions/{qid}/options` | 批量替换 |
 
-> 📋 待开发（小程序端）：`POST /api/requirement/submit`（提交答卷）、`GET /api/requirement/history`、`GET /api/requirement/result/{id}`
+> 📋 小程序端文档：[requirement-c.md](./requirement-c.md)（5 个 C 端端点：config / submit / results / results/{id} / DELETE）
