@@ -373,6 +373,34 @@
               ]
             }
           }
+        },
+        {
+          "name": "7. 投票（C端）",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"type\": \"like\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/scene/{{sceneId}}/vote",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "scene",
+                "{{sceneId}}",
+                "vote"
+              ]
+            }
+          }
         }
       ]
     },

@@ -94,4 +94,14 @@ curl -X DELETE http://localhost:37050/api/scene/1
 | 5 | PUT | `/api/scene/{id}` | 修改（仅 name/cover/enabled/sort） |
 | 6 | DELETE | `/api/scene/{id}` | 逻辑删除 |
 
-> 📋 待开发（小程序端）：`GET /api/scene/options`（C 端仅上线列表）、`POST /api/scene/{id}/vote`（点赞/点踩）
+> 📋 小程序端已对接：✅ `POST /api/scene/{id}/vote`（点赞/点踩）
+
+### C 端：投票 `POST /api/scene/{id}/vote`
+
+Body：`{ "type": "like" }` 或 `{ "type": "dislike" }`
+
+返回：`{ "code": 0, "data": { "id": 1, "likes": 129, "dislikes": 3 }, "message": null }`
+
+```bash
+curl -X POST http://localhost:37050/api/scene/1/vote -H "Content-Type: application/json" -d '{"type":"like"}'
+```
