@@ -142,7 +142,7 @@ curl -X POST http://localhost:37050/api/requirement/submit \
 
 Header（可选）：`X-User-Id: <微信用户 id>`
 
-返回该用户所有答卷，按 `createdAt` 降序。未传 `X-User-Id` 返回空数组。
+传 `X-User-Id` 时返回该用户答卷；**未传时返回全部答卷**（按 `createdAt` 降序）。
 
 ```bash
 curl -H "X-User-Id: 1" "http://localhost:37050/api/requirement/results"
