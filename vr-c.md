@@ -13,26 +13,36 @@
 
 ### 1. VR 样板间列表 `GET /api/vr/list`
 
-仅返回上线（`enabled=true`）的 VR 全景，按 `sort` 升序。
+仅返回上线（`enabled=true`）的 VR 全景，按 `sort` 升序，分页。
+
+| Query | 类型 | 默认 | 说明 |
+|---|---|---|---|
+| `page` | int | `1` | 页码 |
+| `pageSize` | int | `20` | 每页条数 |
 
 ```bash
-curl "http://localhost:37050/api/vr/list"
+curl "http://localhost:37050/api/vr/list?page=1&pageSize=10"
 ```
 
 ```json
 {
   "code": 0,
-  "data": [
-    {
-      "id": 1,
-      "name": "现代轻奢·125㎡大平层",
-      "description": "现代轻奢风格，三室两厅",
-      "cover": "https://...",
-      "style": "轻奢",
-      "area": "125㎡",
-      "viewerUrl": "/vr-viewer/1"
-    }
-  ],
+  "data": {
+    "list": [
+      {
+        "id": 1,
+        "name": "现代轻奢·125㎡大平层",
+        "description": "现代轻奢风格，三室两厅",
+        "cover": "https://...",
+        "style": "轻奢",
+        "area": "125㎡",
+        "viewerUrl": "/vr-viewer/1"
+      }
+    ],
+    "total": 4,
+    "page": 1,
+    "pageSize": 10
+  },
   "message": null
 }
 ```

@@ -121,7 +121,12 @@ Body：
 
 Header：`X-User-Id: <微信用户 id>`
 
-返回该用户提交的所有预约（按 `createdAt` 降序）。未传 `X-User-Id` 返回空数组。
+| Query | 类型 | 默认 | 说明 |
+|---|---|---|---|
+| `page` | int | `1` | 页码 |
+| `pageSize` | int | `20` | 每页条数 |
+
+返回该用户提交的预约（按 `createdAt` 降序，分页）。未传 `X-User-Id` 返回空数组。
 
 ```bash
 curl -H "X-User-Id: 1" "http://localhost:37050/api/my-reservations"

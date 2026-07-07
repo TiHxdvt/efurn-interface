@@ -13,31 +13,38 @@
 
 ### 1. 案例列表 `GET /api/cases`
 
-仅上线案例，按 `sort` 升序，支持 style/area 筛选。
+仅上线案例，按 `sort` 升序，支持 style/area 筛选，分页。
 
-| Query | 类型 | 说明 |
-|---|---|---|
-| `style` | String | 风格筛选（如 `现代轻奢`），精确匹配 |
-| `area` | String | 面积筛选（如 `150㎡`），精确匹配 |
+| Query | 类型 | 默认 | 说明 |
+|---|---|---|---|
+| `style` | String | - | 风格筛选（如 `现代轻奢`），精确匹配 |
+| `area` | String | - | 面积筛选（如 `150㎡`），精确匹配 |
+| `page` | int | `1` | 页码 |
+| `pageSize` | int | `20` | 每页条数 |
 
 ```bash
-curl "http://localhost:37050/api/cases?style=现代轻奢"
+curl "http://localhost:37050/api/cases?style=现代轻奢&page=1&pageSize=10"
 ```
 
 ```json
 {
   "code": 0,
-  "data": [
-    {
-      "id": 1,
-      "title": "翡翠湾 150㎡ 现代轻奢",
-      "cover": "https://x/c1.jpg",
-      "style": "现代轻奢",
-      "area": "150㎡",
-      "tags": ["现代", "轻奢", "大户型"],
-      "description": "本案以现代轻奢为主题..."
-    }
-  ],
+  "data": {
+    "list": [
+      {
+        "id": 1,
+        "title": "翡翠湾 150㎡ 现代轻奢",
+        "cover": "https://x/c1.jpg",
+        "style": "现代轻奢",
+        "area": "150㎡",
+        "tags": ["现代", "轻奢", "大户型"],
+        "description": "本案以现代轻奢为主题..."
+      }
+    ],
+    "total": 4,
+    "page": 1,
+    "pageSize": 10
+  },
   "message": null
 }
 ```
@@ -94,7 +101,7 @@ curl "http://localhost:37050/api/cases/1"
 ## curl 速查
 
 ```bash
-curl "http://localhost:37050/api/cases"
+curl "http://localhost:37050/api/cases?page=1&pageSize=10"
 curl "http://localhost:37050/api/cases?style=现代轻奢&area=150㎡"
 curl "http://localhost:37050/api/cases/1"
 ```
@@ -103,7 +110,7 @@ curl "http://localhost:37050/api/cases/1"
 
 | # | 方法 | 路径 | 功能 |
 |---|---|---|---|
-| 1 | GET | `/api/cases` | 列表（style/area 筛选） |
+| 1 | GET | `/api/cases` | 列表（style/area 筛选，分页） |
 | 2 | GET | `/api/cases/{id}` | 详情（content + images + panoramaId） |
 
 > 📋 关联：首页精选案例用 `/api/home/featured`（前 6），本接口是完整列表/详情页。

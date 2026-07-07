@@ -2138,6 +2138,115 @@
           }
         }
       ]
+    },
+    {
+      "name": "用户收藏",
+      "item": [
+        {
+          "name": "1. 收藏列表",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/favorite/list?targetType=case",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "favorite",
+                "list"
+              ],
+              "query": [
+                {
+                  "key": "targetType",
+                  "value": "case"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "2. 检查是否收藏",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/favorite/check?targetType=case&targetId=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "favorite",
+                "check"
+              ],
+              "query": [
+                {
+                  "key": "targetType",
+                  "value": "case"
+                },
+                {
+                  "key": "targetId",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "3. 添加收藏",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"targetType\": \"case\", \"targetId\": 1}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/favorite",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "favorite"
+              ]
+            }
+          }
+        },
+        {
+          "name": "4. 取消收藏",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"targetType\": \"case\", \"targetId\": 1}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/favorite",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "favorite"
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }
