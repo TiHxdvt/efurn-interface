@@ -156,17 +156,18 @@ Body 同新增。`stepNumber` 变更时校验唯一。
 Body：
 ```json
 {
-  "questionId": "q7_special",
   "categoryId": 2,
   "questionText": "是否有特殊人群需求？",
   "questionType": "single",
   "required": true,
-  "allowSkip": false,
   "withImage": true,
-  "order": 2,
+  "sortOrder": 2,
   "config": {}
 }
 ```
+
+- `questionId`（业务键）由后端自动生成，无需传入
+- `allowSkip` 固定 `false`，无需传入
 - `categoryId` 不存在 → `1002`
 - `questionId` 重复 → `1001`
 - `step` 自动跟随分类 stepNumber，无需传
