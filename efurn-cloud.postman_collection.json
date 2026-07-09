@@ -2247,6 +2247,145 @@
           }
         }
       ]
+    },
+    {
+      "name": "客户管理",
+      "item": [
+        {
+          "name": "1. 列表",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customer?page=1&pageSize=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customer"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "2. 字典",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customer/options",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customer",
+                "options"
+              ]
+            }
+          }
+        },
+        {
+          "name": "3. 详情",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customer/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customer",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "4. 新增",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"张三\", \"phone\": \"13800000001\", \"source\": \"manual\", \"status\": \"potential\", \"assignedTo\": \"刘销售\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/customer",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customer"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5. 修改",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"following\", \"assignedTo\": \"王销售\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/customer/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customer",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "6. 删除",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customer/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customer",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }
