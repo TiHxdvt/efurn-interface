@@ -123,6 +123,16 @@ Body：`{ name, stepNumber, description?, order? }`（`order` 不传则自动取
 
 Body 同新增。`stepNumber` 变更时校验唯一。
 
+**上移/下移操作**：调用两次 `PUT` 交换两个分类的 `stepNumber` + `sortOrder`：
+
+```bash
+# 示例：分类 1（stepNumber=1）和分类 2（stepNumber=2）互换
+curl -X PUT http://localhost:37050/api/requirement/categories/1 -H "Content-Type: application/json" \
+  -d '{"stepNumber": 2, "sortOrder": 2}'
+curl -X PUT http://localhost:37050/api/requirement/categories/2 -H "Content-Type: application/json" \
+  -d '{"stepNumber": 1, "sortOrder": 1}'
+```
+
 #### `DELETE /api/requirement/categories/{id}` — 删除
 
 - 分类下有题目 → `1005`
@@ -177,6 +187,16 @@ Body：
 
 Body 同新增。⚠️ **受保护字段 `questionId`/`categoryId`/`step` 即使传入也会被忽略**。
 - `order` 非正整数 → `1006`
+
+**题目上移/下移**：调用两次 `PUT` 交换两个题目的 `order`：
+
+```bash
+# 示例：题目 1（order=1）和题目 2（order=2）互换
+curl -X PUT http://localhost:37050/api/requirement/questions/1 -H "Content-Type: application/json" \
+  -d '{"order": 2}'
+curl -X PUT http://localhost:37050/api/requirement/questions/2 -H "Content-Type: application/json" \
+  -d '{"order": 1}'
+```
 
 #### `DELETE /api/requirement/questions/{id}` — 删除（逻辑删除）
 
