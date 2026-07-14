@@ -88,12 +88,15 @@
   "data": {
     "steps": [1, 2, 3, 4, 5, 6],
     "stepMap": { "1": "基础信息", "2": "家庭成员", "3": "空间需求", "4": "风格偏好", "5": "设备智能", "6": "预算时间" },
+    "categoryMap": { "11": "基础信息", "12": "家庭成员", "13": "空间需求", "14": "风格偏好", "15": "设备智能", "16": "预算时间" },
     "questionTypes": ["single", "multi", "text"],
     "questionTypeMap": { "single": "单选", "multi": "多选", "text": "文本" }
   },
   "message": null
 }
 ```
+
+> 📌 `stepMap` 的 key 是步骤编号（1-6），`categoryMap` 的 key 是分类数据库 ID。**新增题目时用 `categoryMap` 的 key 作为 `categoryId`**，不要用 `stepMap` 的 key。
 
 > `stepMap` 由分类表动态生成（分类改名后自动同步）。
 
