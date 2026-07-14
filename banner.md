@@ -11,7 +11,7 @@
 | 字段 | 类型 | 可空 | 说明 |
 |---|---|---|---|
 | `id` | Long | 否 | 主键 |
-| `name` | String | 否 | Banner 名称（应用层唯一，1-50 字） |
+| `name` | String | 否 | Banner 名称（1-50 字） |
 | `cover` | String | 否 | 封面图地址 |
 | `link` | String | 是 | 点击跳转链接，可能为 `null` |
 | `sort` | Integer | 否 | 排序号，0-9999，越小越靠前 |
@@ -27,7 +27,7 @@
 
 | code | 含义 |
 |---|---|
-| `1001` | 该 banner 名称已存在 |
+| `1001` | 该 banner 名称已存在 |（已移除唯一性校验） |
 | `1002` | 名称必填 / 超过 50 字 |
 | `1003` | 请上传主图（cover 为空） |
 | `1004` | 排序值需 0-9999 |
@@ -64,7 +64,7 @@ curl "http://localhost:37050/api/banner?page=1&pageSize=10&enabled=true&sortBy=s
 ### 4. 新增 `POST /api/banner`
 
 Body：`{ name, cover, link?, sort?, enabled? }`
-- 校验顺序：cover(1003) → name(1002) → sort(1004) → name 唯一(1001)
+- 校验顺序：cover(1003) → name(1002) → sort(1004)
 - 成功返回含 id 的对象
 
 ```bash
@@ -74,7 +74,7 @@ curl -X POST http://localhost:37050/api/banner -H "Content-Type: application/jso
 
 ### 5. 修改 `PUT /api/banner/{id}`
 
-Body 同新增（全部可选，传啥改啥）。各字段提供时分别校验；name 变更时校验唯一 → `1001`。不存在 → `404`。
+Body 同新增（全部可选，传啥改啥）。各字段提供时分别校验。不存在 → `404`。
 
 ### 6. 删除 `DELETE /api/banner/{id}`（逻辑删除）
 

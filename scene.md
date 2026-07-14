@@ -11,7 +11,7 @@
 | 字段 | 类型 | 可空 | 说明 |
 |---|---|---|---|
 | `id` | Long | 否 | 主键 |
-| `name` | String | 否 | 场景名称（应用层唯一，1-50 字） |
+| `name` | String | 否 | 场景名称（1-50 字） |
 | `cover` | String | 否 | 封面图地址 |
 | `likes` | Integer | 否 | 点赞数（**只读**，小程序累计，后台不可改） |
 | `dislikes` | Integer | 否 | 点踩数（**只读**，小程序累计，后台不可改） |
@@ -28,7 +28,7 @@
 
 | code | 含义 |
 |---|---|
-| `1001` | 该生活场景名称已存在 |
+| `1001` | 该生活场景名称已存在 |（已移除唯一性校验） |
 | `1002` | 名称必填 / 超过 50 字 |
 | `1003` | 请上传主图（cover 为空） |
 | `404` | 生活场景不存在 |
@@ -60,11 +60,11 @@
 ### 4. 新增 `POST /api/scene`
 
 Body：`{ name, cover, enabled?, sort? }`（**不要传** likes/dislikes，后端置 0）
-- 校验：cover(1003) → name(1002) → name 唯一(1001)
+- 校验：cover(1003) → name(1002)
 
 ### 5. 修改 `PUT /api/scene/{id}`
 
-Body 同新增（全可选）。仅改 name/cover/enabled/sort；**likes/dislikes 不可改**（DTO 无该字段）。name 变更时校验唯一 → `1001`。不存在 → `404`。
+Body 同新增（全可选）。仅改 name/cover/enabled/sort；**likes/dislikes 不可改**（DTO 无该字段）。不存在 → `404`。
 
 ### 6. 删除 `DELETE /api/scene/{id}`（逻辑删除）→ `{ "id": <id> }`
 

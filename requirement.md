@@ -179,8 +179,8 @@ Body：
 - `questionId`（业务键）由后端自动生成，无需传入
 - `allowSkip` 固定 `false`，无需传入
 - `categoryId` 不存在 → `1002`
-- `questionId` 重复 → `1001`
 - `step` 自动跟随分类 stepNumber，无需传
+- 同分类下 `questionText` 重复 → `1001`
 - 成功返回含 id 的对象
 
 #### `PUT /api/requirement/questions/{id}` — 修改
