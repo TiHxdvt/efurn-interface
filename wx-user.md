@@ -8,15 +8,15 @@
 
 ---
 
-## ⚠️ 当前状态：半完工
+## ⚠️ 当前状态：基本可用
 
 | 部分 | 状态 | 说明 |
 |---|---|---|
-| Controller 骨架 | ✅ 已完成 | 3 个端点已定义 |
+| Controller | ✅ 已完成 | 3 个端点已定义 |
 | Entity / DTO / VO | ✅ 已完成 | `WxUser` / `WxLoginModel` / `WxLoginVO` / `WxLoginUser` |
-| Service 实现 | 🔧 骨架 | 核心逻辑已写但被注释（token 签发、用户信息更新等） |
-| 数据库表 | ✅ 已完成 | `wx_user`（PostgreSQL 建表脚本，MySQL 版需适配） |
-| 网关白名单 | ⏳ 待配置 | `/wx-user/login` 和 `/wx-user/callback` 需放行 |
+| Service 实现 | ✅ 基本可用 | 登录流程可工作（code → openid → 注册/查库 → 返回用户信息） |
+| 数据库表 | ✅ 已完成 | `wx_user` |
+| 网关白名单 | ✅ 已配置 | `/wx-user/login` 和 `/wx-user/callback` 已放行 |
 
 **本模块使用 `R<T>` 响应格式**（主框架），注意与 wechat 业务模块的 `Result<T>` 不同：
 
@@ -118,18 +118,13 @@
 curl -X POST "http://localhost:37050/wx-user/login?code=TEST_LOGIN_CODE"
 ```
 
-**响应**（当前骨架返回 `R.ok()`，完工后应返回）：
+**响应**：
 ```json
 {
   "code": 200,
   "data": {
-    "cacheKey": "login:sys:token:xxxx",
     "openId": "oXXXXXXX",
-    "username": "微信用户",
-    "status": "0",
-    "avatarUrl": "https://...",
-    "loginTime": 1719900000000,
-    "expireTime": 1719907200000
+    "username": "微信用户"
   },
   "msg": null
 }
@@ -216,13 +211,6 @@ curl "http://localhost:37050/wx-user/auth/logout?userId=1"
 
 | # | 方法 | 路径 | 功能 | 状态 |
 |---|---|---|---|---|
-| 1 | POST | `/wx-user/login` | 微信登录（code → openid → token） | 🔧 骨架 |
+| 1 | POST | `/wx-user/login` | 微信登录（code → openid → 注册/查库） | ✅ 可用 |
 | 2 | POST | `/wx-user/callback` | 微信回调通知（预留） | ⏳ 空实现 |
 | 3 | GET | `/wx-user/auth/logout` | 用户登出 | ⏳ 空实现 |
-
-> 📋 待完成：
-> - 取消注释 `WxUserServiceImpl.wechatLogin()` 中的 token 签发 + 用户信息更新逻辑
-> - 统一响应格式为 `Result<T>`（code=0）或保持 `R<T>` 但在公共约定中说明
-> - 网关白名单放行 `/wx-user/login` 和 `/wx-user/callback`
-> - 实现登出时清除 Redis token
-> - 适配 MySQL 建表语句（当前 SQL 为 PostgreSQL 语法）

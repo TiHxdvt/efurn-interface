@@ -65,7 +65,7 @@
 
 | code | 含义 | 触发场景 |
 |---|---|---|
-| `1001` | 唯一冲突 | 分类 stepNumber 重复 / 题目业务键 questionId 重复 |
+| `1001` | 唯一冲突 | 分类 stepNumber 重复 / 题目业务键 questionId 重复 / 同分类下题干重复 |
 | `1002` | 外键无效 | 题目 categoryId 指向不存在的分类 |
 | `1003` | 已删不可改 | 编辑已逻辑删除的记录 |
 | `1005` | 级联拒绝 | 删除分类时其下仍有未删题目 |
@@ -89,6 +89,7 @@
     "steps": [1, 2, 3, 4, 5, 6],
     "stepMap": { "1": "基础信息", "2": "家庭成员", "3": "空间需求", "4": "风格偏好", "5": "设备智能", "6": "预算时间" },
     "categoryMap": { "11": "基础信息", "12": "家庭成员", "13": "空间需求", "14": "风格偏好", "15": "设备智能", "16": "预算时间" },
+    "stepIdMap": { "1": 11, "2": 12, "3": 13, "4": 14, "5": 15, "6": 16 },
     "questionTypes": ["single", "multi", "text"],
     "questionTypeMap": { "single": "单选", "multi": "多选", "text": "文本" }
   },
@@ -96,9 +97,9 @@
 }
 ```
 
-> 📌 `stepMap` 的 key 是步骤编号（1-6），`categoryMap` 的 key 是分类数据库 ID。**新增题目时用 `categoryMap` 的 key 作为 `categoryId`**，不要用 `stepMap` 的 key。
+> 📌 `stepMap` 的 key 是步骤编号（1-6），`categoryMap` 的 key 是分类数据库 ID。`stepIdMap` 是步骤编号到分类 ID 的映射。**新增题目时用 `categoryMap` 的 key 作为 `categoryId`**，不要用 `stepMap` 的 key。
 
-> `stepMap` 由分类表动态生成（分类改名后自动同步）。
+> `stepMap` / `categoryMap` / `stepIdMap` 均由分类表动态生成（分类改名后自动同步）。
 
 ---
 

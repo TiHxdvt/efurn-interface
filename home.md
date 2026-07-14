@@ -49,7 +49,7 @@ curl "http://localhost:37050/api/home/featured"
 
 ### 4. 首页整装套餐 `GET /api/home/packages`
 
-按 `sort` 升序，**最多 3 个**。字段 `label/name/price(千分位)/tags/bgImage`。
+仅上线（`bookable=true`），按 `sort` 升序，**最多 3 个**。字段 `label/name/price(千分位)/tags/bgImage`。
 
 ```bash
 curl "http://localhost:37050/api/home/packages"
@@ -91,7 +91,7 @@ curl "http://localhost:37050/api/home/packages"
 | 1 | GET | `/api/home/banners` | 首页 Banner（仅上线） |
 | 2 | GET | `/api/home/scenes` | 首页生活场景（仅上线 + likes/dislikes） |
 | 3 | GET | `/api/home/featured` | 精选案例（仅上线，最多 6 个） |
-| 4 | GET | `/api/home/packages` | 整装套餐（最多 3 个） |
+| 4 | GET | `/api/home/packages` | 整装套餐（仅上线，最多 3 个） |
 
 > 📌 首页五个区块状态：
 > - Banner / 生活场景 / 精选案例 / 整装套餐：✅ C 端接口已全部完成

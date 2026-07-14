@@ -45,7 +45,7 @@
 | `name` | String | - | 名称模糊 |
 | `enabled` | Boolean | - | `true`/`false` |
 | `sortBy` | String | `sort` | `sort` / `createdAt` |
-| `order` | String | `asc` | `asc` / `desc`（`sortBy=createdAt` 时固定 desc） |
+| `order` | String | `asc` | `asc` / `desc` |
 
 ```bash
 curl "http://localhost:37050/api/banner?page=1&pageSize=10&enabled=true&sortBy=sort&order=asc"
