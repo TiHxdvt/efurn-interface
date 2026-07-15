@@ -4,7 +4,7 @@
 
 **路径前缀**：`/api/lead`
 
-本模块含线索主表 + 动作记录 + 跟进记录子表 + 转客户联动，共 12 个端点。
+本模块含线索主表 + 动作记录 + 跟进记录子表 + 转客户 + 流失联动，共 13 个端点。
 
 ---
 
@@ -95,7 +95,8 @@ Body：`{ name?, phone, source?, assignedTo?, remark? }`
 #### 4. 编辑 `PUT /api/lead/{id}`
 - 终态（converted/lost）→ `1003`
 - 改 phone 时校验唯一 → `1001`
-- **不能改** status / lastFollowedAt / lastActionAt / customerId（系统维护）
+- **副作用**：更新 `lastActionAt`
+- **不能改** status / lastFollowedAt / lastActionAt（系统维护）/ customerId
 
 #### 5. 删除 `DELETE /api/lead/{id}`（逻辑删除）→ `{ "id": <id> }`
 
@@ -108,23 +109,33 @@ Body：`{ name?, phone, source?, assignedTo?, remark? }`
 #### 8. 新增跟进 `POST /api/lead/{id}/follows`
 Body：`{ content, channel?, nextFollowAt? }`
 - content 必填 → `1004`
-- **副作用**：更新线索 `lastFollowedAt`；`pending` 自动转 `following`
+- **副作用**：更新线索 `lastFollowedAt` + `lastActionAt`；`pending` 自动转 `following`
 
 #### 9. 编辑跟进 `PUT /api/lead/{id}/follows/{followId}`
 
 #### 10. 删除跟进 `DELETE /api/lead/{id}/follows/{followId}` → `{ "id": <followId> }`
 
-### 转客户
+### 转客户 / 流失
 
 #### 11. 转客户 `POST /api/lead/{id}/convert`（**事务**）
 Body：`{ province, city, region }`
 
-逻辑：校验非终态（`1003`）+ 手机号非客户（`1002`）→ 写入 `customer_info`（status=`potential`）→ 线索 `status=converted` + `customerId` → 返回 `{ lead, customer }`
+逻辑：校验非终态（`1003`）+ 手机号非客户（`1002`）→ 写入 `customer_info`（status=`potential`）→ 线索 `status=converted` + `customerId` + 更新 `lastActionAt` → 返回 `{ lead, customer }`
 
 ```bash
 curl -X POST http://localhost:37050/api/lead/2/convert -H "Content-Type: application/json" \
   -d '{"province":"SH","city":"SH","region":"Pudong"}'
 ```
+
+#### 12. 标记流失 `PUT /api/lead/{id}/lost`
+
+逻辑：校验非终态（`1003`）→ `status=lost` + 更新 `lastActionAt` → 记录 `lost` 动作 → 返回更新后的线索。
+
+```bash
+curl -X PUT http://localhost:37050/api/lead/11/lost
+```
+
+> 📌 `lastActionAt` 更新场景：手动新增 / 编辑保存 / 新增跟进 / 转客户 / 标记流失。
 
 ---
 
@@ -144,7 +155,7 @@ curl -X POST http://localhost:37050/api/lead/2/convert -H "Content-Type: applica
   -d '{"province":"SH","city":"SH","region":"Pudong"}'
 ```
 
-## 接口清单（12 个）
+## 接口清单（13 个）
 
 | # | 方法 | 路径 | 功能 |
 |---|---|---|---|
@@ -152,13 +163,14 @@ curl -X POST http://localhost:37050/api/lead/2/convert -H "Content-Type: applica
 | 2 | GET | `/api/lead` | 列表（多维筛选） |
 | 3 | GET | `/api/lead/{id}` | 详情 |
 | 4 | POST | `/api/lead` | 新增（manual 自动动作） |
-| 5 | PUT | `/api/lead/{id}` | 编辑（终态不可改） |
+| 5 | PUT | `/api/lead/{id}` | 编辑（终态不可改，副作用：lastActionAt） |
 | 6 | DELETE | `/api/lead/{id}` | 删除 |
 | 7 | GET | `/api/lead/{id}/actions` | 动作列表 |
 | 8 | GET | `/api/lead/{id}/follows` | 跟进列表 |
-| 9 | POST | `/api/lead/{id}/follows` | 新增跟进（副作用：lastFollowedAt + 转跟进中） |
+| 9 | POST | `/api/lead/{id}/follows` | 新增跟进（副作用：lastFollowedAt+lastActionAt + 转跟进中） |
 | 10 | PUT | `/api/lead/{id}/follows/{followId}` | 编辑跟进 |
 | 11 | DELETE | `/api/lead/{id}/follows/{followId}` | 删除跟进 |
 | 12 | POST | `/api/lead/{id}/convert` | 转客户（事务，写 customer_info） |
+| 13 | PUT | `/api/lead/{id}/lost` | 标记流失（记 lost 动作） |
 
 > 📋 关联：`customer_info` 表为最小版（转客户写入），客户管理模块后续扩展。

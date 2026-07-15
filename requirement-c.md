@@ -136,6 +136,8 @@ curl -X POST http://localhost:37050/api/requirement/submit \
 { "code": 0, "data": { "id": 1 }, "message": null }
 ```
 
+> 📌 **自动创建线索**：提交成功后，若当前登录用户已绑定手机号且同手机号无线索，自动创建一条线索（`source=mini_assess`，`status=pending`）并记录 `mini_assess` 动作。失败不影响提交。
+
 ---
 
 ### 3. 我的答卷列表 `GET /api/requirement/results`

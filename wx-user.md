@@ -132,7 +132,33 @@ curl -X POST "http://localhost:37050/wx-user/login?code=TEST_LOGIN_CODE"
 
 ---
 
-### 2. 微信回调 `POST /wx-user/callback`
+### 2. 绑定手机号 `POST /wx-user/bindPhone`
+
+小程序端通过微信 `getPhoneNumber` 授权拿到 code，后端调微信接口换取真实手机号并写入 `wx_user.phone_num`。**需登录态**（携带 `wxBearer` token）。
+
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|---|---|---|---|---|
+| `code` | Query | String | 是 | `<button open-type="getPhoneNumber">` 回调拿到的 code |
+
+**流程**：
+1. 从 token 取当前登录用户 openId
+2. 获取微信 access_token（Redis 缓存，7000s）
+3. 用 code + access_token 调微信 `getuserphonenumber` 接口
+4. 更新 `wx_user.phone_num`
+5. 返回手机号字符串
+
+```bash
+curl -X POST "http://localhost:37050/wx-user/bindPhone?code=xxxx" \
+  -H "Authorization: wxBearer <token>"
+```
+
+**响应**：`{ "code": 200, "data": "13800138000", "msg": null }`
+
+> 📌 access_token 用 Redis key `wx:access_token` 缓存，避免重复调用微信接口。
+
+---
+
+### 3. 微信回调 `POST /wx-user/callback`
 
 微信服务器回调通知接口（预留，当前返回空 `R.ok()`）。
 
@@ -144,7 +170,7 @@ curl -X POST http://localhost:37050/wx-user/callback
 
 ---
 
-### 3. 用户登出 `GET /wx-user/auth/logout`
+### 4. 用户登出 `GET /wx-user/auth/logout`
 
 小程序端用户登出。
 
@@ -200,6 +226,9 @@ public interface RemoteWxUserService {
 # 登录
 curl -X POST "http://localhost:37050/wx-user/login?code=TEST_LOGIN_CODE"
 
+# 绑定手机号
+curl -X POST "http://localhost:37050/wx-user/bindPhone?code=xxxx" -H "Authorization: wxBearer <token>"
+
 # 回调
 curl -X POST http://localhost:37050/wx-user/callback
 
@@ -207,10 +236,11 @@ curl -X POST http://localhost:37050/wx-user/callback
 curl "http://localhost:37050/wx-user/auth/logout?userId=1"
 ```
 
-## 接口清单（3 个）
+## 接口清单（4 个）
 
 | # | 方法 | 路径 | 功能 | 状态 |
 |---|---|---|---|---|
-| 1 | POST | `/wx-user/login` | 微信登录（code → openid → 注册/查库） | ✅ 可用 |
-| 2 | POST | `/wx-user/callback` | 微信回调通知（预留） | ⏳ 空实现 |
-| 3 | GET | `/wx-user/auth/logout` | 用户登出 | ⏳ 空实现 |
+| 1 | POST | `/wx-user/login` | 微信登录（code → openid → 注册/查库 → 自动建三维家账号） | ✅ 可用 |
+| 2 | POST | `/wx-user/bindPhone` | 绑定手机号（getPhoneNumber code → 写 phone_num） | ✅ 可用 |
+| 3 | POST | `/wx-user/callback` | 微信回调通知（预留） | ⏳ 空实现 |
+| 4 | GET | `/wx-user/auth/logout` | 用户登出 | ⏳ 空实现 |

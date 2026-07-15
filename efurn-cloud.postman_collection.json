@@ -67,6 +67,21 @@
       "key": "resultId",
       "value": "1",
       "description": "需求测评答卷 id"
+    },
+    {
+      "key": "sanweijia_app_id",
+      "value": "2619602550074",
+      "description": "三维家AppID"
+    },
+    {
+      "key": "sanweijia_app_secret",
+      "value": "9ae56192520740e48372d54806c78b6f",
+      "description": "三维家AppSecret"
+    },
+    {
+      "key": "wxToken",
+      "value": "",
+      "description": "微信用户 token"
     }
   ],
   "item": [
@@ -1788,6 +1803,31 @@
             },
             "description": "事务：写 customer_info + lead converted。返回 {lead, customer}。终态→1003，手机号已是客户→1002"
           }
+        },
+        {
+          "name": "标记流失",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/lead/{{leadId}}/lost",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "lead",
+                "{{leadId}}",
+                "lost"
+              ]
+            },
+            "description": "标记线索为已流失，记录lost动作"
+          }
         }
       ]
     },
@@ -2136,6 +2176,36 @@
               ]
             }
           }
+        },
+        {
+          "name": "绑定手机号",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "wxBearer {{wxToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/wx-user/bindPhone?code=GETPHONENUMBER_CODE",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wx-user",
+                "bindPhone"
+              ],
+              "query": [
+                {
+                  "key": "code",
+                  "value": "GETPHONENUMBER_CODE",
+                  "description": "button getPhoneNumber 回调拿到的 code"
+                }
+              ]
+            },
+            "description": "需登录态，用微信getPhoneNumber code换手机号"
+          }
         }
       ]
     },
@@ -2383,6 +2453,157 @@
                 "1"
               ]
             }
+          }
+        }
+      ]
+    },
+    {
+      "name": "AI轻设计（三维家）",
+      "item": [
+        {
+          "name": "1. 获取Access-Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{sanweijia_app_id}}"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{sanweijia_app_secret}}"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://graph.3vjia.com/oauth/token",
+              "host": [
+                "graph.3vjia.com"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ]
+            },
+            "description": "获取access_token，有效期2小时。返回的access_token会自动保存到变量sanweijia_access_token"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var res = pm.response.json();",
+                  "if (res.access_token) {",
+                  "    pm.collectionVariables.set('sanweijia_access_token', res.access_token);",
+                  "    console.log('Token已保存: ' + res.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. 创建三维家账号",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Access-Token",
+                "value": "{{sanweijia_access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"efurn_test001\",\n  \"password\": \"Efurn@2026\",\n  \"name\": \"测试用户\",\n  \"outUserId\": \"test001\"\n}"
+            },
+            "url": {
+              "raw": "https://open-gateway.3vjia.com/api/v1/user/create",
+              "host": [
+                "open-gateway.3vjia.com"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "create"
+              ]
+            },
+            "description": "需要先执行步骤1获取Token。Access-Token请求头必须严格大小写"
+          }
+        },
+        {
+          "name": "3. 绑定三维家账号",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Access-Token",
+                "value": "{{sanweijia_access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"outUserId\": \"test001\",\n  \"userName\": \"efurn_test001\"\n}"
+            },
+            "url": {
+              "raw": "https://open-gateway.3vjia.com/api/v1/accountbinding/bindAccount",
+              "host": [
+                "open-gateway.3vjia.com"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "accountbinding",
+                "bindAccount"
+              ]
+            },
+            "description": "需要先执行步骤1获取Token"
+          }
+        },
+        {
+          "name": "4. 获取免密登录URL（我们后端）",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "wxBearer {{wxToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/diy/login-url",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "diy",
+                "login-url"
+              ],
+              "query": []
+            },
+            "description": "从登录态取userid，无需传参"
           }
         }
       ]
