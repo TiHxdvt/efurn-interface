@@ -6,6 +6,12 @@
 
 版本状态机：`draft`（草稿）→ `current`（当前使用）→ `archived`（已归档），**全表仅 1 条 current**。
 
+**版本号规则**：
+- 新增：大版本 +1，小版本归零（如 v1.2 → v2.0，首次为 v1.0）
+- 编辑：小版本 +1（如 v1.1 → v1.2）
+
+**content 字段**：前端传入时使用 Base64 编码，后端自动解码后存储。
+
 ---
 
 ## 数据模型
@@ -13,10 +19,10 @@
 | 字段 | 类型 | 可空 | 说明 |
 |---|---|---|---|
 | `id` | Long | 否 | 主键 |
-| `version` | String | 否 | 版本号，**自动生成**（v1.0/v1.1/v1.2…，末位 +1） |
+| `version` | String | 否 | 版本号，**自动生成**（新增：大版本+1，编辑：小版本+1） |
 | `title` | String | 否 | 标题 |
 | `summary` | String | 否 | 描述 |
-| `content` | String | 否 | 富文本内容（HTML） |
+| `content` | String | 否 | 富文本内容（HTML，前端 Base64 编码传输，后端自动解码） |
 | `status` | String | 否 | 状态：`draft` / `current` / `archived` |
 | `isCurrent` | Boolean | 否 | 是否当前使用（仅 current 那条为 true） |
 | `createdBy` | String | 否 | 创建者 |

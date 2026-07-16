@@ -6,6 +6,8 @@
 
 单表，含富文本 `content`。
 
+**content 字段**：前端传入时使用 Base64 编码，后端自动解码后存储。
+
 ---
 
 ## 数据模型
@@ -19,7 +21,7 @@
 | `price` | Long | 否 | 价格（整数） |
 | `subtitle` | String | 是 | 副标题 |
 | `tags` | String[] | 是 | 标签数组 |
-| `content` | String | 是 | 图文详情（富文本 HTML，用 `<h2>` 分块：套餐亮点/全包包含/合作品牌） |
+| `content` | String | 是 | 图文详情（富文本 HTML，前端 Base64 编码传输，后端自动解码） |
 | `bookable` | Boolean | 否 | 是否展示「立即预约」按钮 |
 | `sort` | Integer | 否 | 排序号，默认 0 |
 | `createdBy` | String | 否 | 创建者 |

@@ -6,6 +6,8 @@
 
 单表 CRUD，含富文本 `content`。
 
+**content 字段**：前端传入时使用 Base64 编码，后端自动解码后存储。
+
 ---
 
 ## 数据模型
@@ -19,7 +21,7 @@
 | `area` | String | 是 | 面积（如 150㎡） |
 | `tags` | String[] | 否 | 标签数组，1-5 项，每项 1-10 字 |
 | `description` | String | 否 | 介绍（≤100 字） |
-| `content` | String | 否 | 图文详情（富文本 HTML，去标签后非空） |
+| `content` | String | 否 | 图文详情（富文本 HTML，前端 Base64 编码传输，后端自动解码） |
 | `sort` | Integer | 否 | 排序号，默认 0 |
 | `enabled` | Boolean | 否 | 是否启用 |
 | `createdAt` | String(Date) | 否 | 创建时间 |

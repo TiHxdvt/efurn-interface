@@ -188,6 +188,66 @@ curl "http://localhost:37050/wx-user/auth/logout?userId=1"
 
 ---
 
+### 5. 获取个人信息 `GET /wx-user/info`
+
+获取当前登录用户的个人信息。**需登录态**（携带 `wxBearer` token）。
+
+```bash
+curl "http://localhost:37050/wx-user/info" \
+  -H "Authorization: wxBearer <token>"
+```
+
+**响应**：
+```json
+{
+  "code": 200,
+  "data": {
+    "id": "oXXXXXXX",
+    "nickname": "张三",
+    "avatar": "https://cdn.xxx.com/avatar.jpg",
+    "phone": "13800138000"
+  },
+  "msg": null
+}
+```
+
+| 字段 | 类型 | 说明 |
+|---|---|---|
+| `id` | String | 用户 ID（openId） |
+| `nickname` | String | 昵称 |
+| `avatar` | String | 头像 URL |
+| `phone` | String | 手机号（未绑定时为 null） |
+
+---
+
+### 6. 更新个人信息 `PUT /wx-user/info`
+
+更新当前登录用户的昵称和头像。**需登录态**（携带 `wxBearer` token）。
+
+**请求体**：
+```json
+{
+  "nickname": "新昵称",
+  "avatar": "https://cdn.xxx.com/new-avatar.jpg"
+}
+```
+
+| 字段 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| `nickname` | String | 否 | 昵称，传空则不更新 |
+| `avatar` | String | 否 | 头像 CDN URL，先调上传接口获取 |
+
+```bash
+curl -X PUT "http://localhost:37050/wx-user/info" \
+  -H "Authorization: wxBearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"nickname":"新昵称","avatar":"https://cdn.xxx.com/avatar.jpg"}'
+```
+
+**响应**：同获取个人信息接口，返回更新后的完整用户信息。
+
+---
+
 ## 数据库表（`wx_user`）
 
 ```sql
@@ -234,9 +294,18 @@ curl -X POST http://localhost:37050/wx-user/callback
 
 # 登出
 curl "http://localhost:37050/wx-user/auth/logout?userId=1"
+
+# 获取个人信息
+curl "http://localhost:37050/wx-user/info" -H "Authorization: wxBearer <token>"
+
+# 更新个人信息
+curl -X PUT "http://localhost:37050/wx-user/info" \
+  -H "Authorization: wxBearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"nickname":"新昵称","avatar":"https://cdn.xxx.com/avatar.jpg"}'
 ```
 
-## 接口清单（4 个）
+## 接口清单（6 个）
 
 | # | 方法 | 路径 | 功能 | 状态 |
 |---|---|---|---|---|
@@ -244,3 +313,5 @@ curl "http://localhost:37050/wx-user/auth/logout?userId=1"
 | 2 | POST | `/wx-user/bindPhone` | 绑定手机号（getPhoneNumber code → 写 phone_num） | ✅ 可用 |
 | 3 | POST | `/wx-user/callback` | 微信回调通知（预留） | ⏳ 空实现 |
 | 4 | GET | `/wx-user/auth/logout` | 用户登出 | ⏳ 空实现 |
+| 5 | GET | `/wx-user/info` | 获取个人信息 | ✅ 可用 |
+| 6 | PUT | `/wx-user/info` | 更新个人信息 | ✅ 可用 |
