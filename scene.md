@@ -94,14 +94,25 @@ curl -X DELETE http://localhost:37050/api/scene/1
 | 5 | PUT | `/api/scene/{id}` | 修改（仅 name/cover/enabled/sort） |
 | 6 | DELETE | `/api/scene/{id}` | 逻辑删除 |
 
-> 📋 小程序端已对接：✅ `POST /api/scene/{id}/vote`（点赞/点踩）
+> 📋 小程序端已对接：✅ `POST /api/scene/{id}/vote`（点赞/点踩，切换式，记录投票用户）
 
 ### C 端：投票 `POST /api/scene/{id}/vote`
 
+切换式投票：再点同一种类型 = **取消**，点另一种类型 = **切换**。后端自动维护 `scene_vote` 记录与 likes/dislikes 计数，刷新后投票状态保留。
+
+| Header | 说明 |
+|---|---|
+| `X-User-Id` | 用户 id，由网关从 token 注入；未携带时按游客处理（仅累加计数，不记录投票状态，刷新即丢） |
+
 Body：`{ "type": "like" }` 或 `{ "type": "dislike" }`
 
-返回：`{ "code": 0, "data": { "id": 1, "likes": 129, "dislikes": 3 }, "message": null }`
+返回：
+```json
+{ "code": 0, "data": { "id": 1, "likes": 129, "dislikes": 3, "userVote": "like" }, "message": null }
+```
+
+`userVote`：本次操作后该用户的投票状态，`like` / `dislike` / `null`（已取消）。前端直接用它刷新按钮高亮，无需重新拉列表。
 
 ```bash
-curl -X POST http://localhost:37050/api/scene/1/vote -H "Content-Type: application/json" -d '{"type":"like"}'
+curl -X POST http://localhost:37050/api/scene/1/vote -H "Content-Type: application/json" -H "X-User-Id: 1" -d '{"type":"like"}'
 ```

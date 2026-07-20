@@ -23,14 +23,22 @@ curl "http://localhost:37050/api/home/banners"
 
 ### 2. 首页生活场景 `GET /api/home/scenes`
 
-仅上线，按 `sort` 升序，含 likes/dislikes。字段 `title/image/likes/dislikes`。
+仅上线，按 `sort` 升序，含 likes/dislikes + 当前用户投票状态。字段 `title/image/likes/dislikes/userVote`。
+
+| Header | 说明 |
+|---|---|
+| `X-User-Id` | 用户 id，由网关从 token 注入；携带时返回该用户的 `userVote`，未携带时 `userVote` 恒为 `null` |
 
 ```bash
-curl "http://localhost:37050/api/home/scenes"
+curl "http://localhost:37050/api/home/scenes" -H "X-User-Id: 1"
 ```
 ```json
-{ "code": 0, "data": [ { "id": 1, "title": "清晨第一缕阳光", "image": "https://x/s1.jpg", "likes": 128, "dislikes": 3 } ], "message": null }
+{ "code": 0, "data": [ { "id": 1, "title": "清晨第一缕阳光", "image": "https://x/s1.jpg", "likes": 128, "dislikes": 3, "userVote": "like" } ], "message": null }
 ```
+
+| 字段 | 类型 | 说明 |
+|---|---|---|
+| `userVote` | String \| null | 当前用户投票状态：`like` / `dislike` / `null`（未投）。用于按钮高亮 |
 
 ### 3. 首页精选案例 `GET /api/home/featured`
 
@@ -89,7 +97,7 @@ curl "http://localhost:37050/api/home/packages"
 | # | 方法 | 路径 | 功能 |
 |---|---|---|---|
 | 1 | GET | `/api/home/banners` | 首页 Banner（仅上线） |
-| 2 | GET | `/api/home/scenes` | 首页生活场景（仅上线 + likes/dislikes） |
+| 2 | GET | `/api/home/scenes` | 首页生活场景（仅上线 + likes/dislikes + userVote） |
 | 3 | GET | `/api/home/featured` | 精选案例（仅上线，最多 6 个） |
 | 4 | GET | `/api/home/packages` | 整装套餐（仅上线，最多 3 个） |
 

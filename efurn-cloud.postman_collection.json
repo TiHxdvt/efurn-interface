@@ -397,6 +397,11 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "1",
+                "description": "用户id（网关从 token 注入；不传则按游客，仅累加计数不记录投票）"
               }
             ],
             "body": {
@@ -414,7 +419,8 @@
                 "{{sceneId}}",
                 "vote"
               ]
-            }
+            },
+            "description": "切换式投票：再点同类型=取消，点另一类型=切换。后端写 scene_vote 表，刷新后状态保留。返回 data 含 userVote（like/dislike/null）。"
           }
         }
       ]
@@ -1857,7 +1863,13 @@
           "name": "2. 首页生活场景",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "1",
+                "description": "用户id（网关从 token 注入）；携带时返回 userVote，否则恒为 null"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/home/scenes",
               "host": [
@@ -1868,7 +1880,8 @@
                 "home",
                 "scenes"
               ]
-            }
+            },
+            "description": "返回每个场景的 likes/dislikes + 当前用户投票状态 userVote（like/dislike/null）。"
           }
         },
         {
@@ -1937,6 +1950,11 @@
                   "key": "area",
                   "value": "",
                   "description": "面积筛选"
+                },
+                {
+                  "key": "layout",
+                  "value": "",
+                  "description": "户型筛选（匹配案例 tags 中包含该项）"
                 }
               ]
             }
@@ -1958,6 +1976,25 @@
                 "{{caseId}}"
               ]
             }
+          }
+        },
+        {
+          "name": "3. 筛选选项",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cases/options",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cases",
+                "options"
+              ]
+            },
+            "description": "返回所有风格 styles + 户型 layouts（从已上线案例聚合去重）。供小程序渲染筛选条件。data: { styles:[...], layouts:[...] }"
           }
         }
       ]

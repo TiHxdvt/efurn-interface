@@ -99,6 +99,8 @@ Body：
 {
   "name": "翡翠湾 150㎡ 现代轻奢",
   "cover": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=750&q=80",
+  "style": "现代轻奢",
+  "area": "150㎡",
   "tags": ["现代", "轻奢", "大户型"],
   "description": "本案以现代轻奢为主题，融合金属、大理石、丝绒等材质。",
   "content": "<p><strong>设计理念：</strong>现代轻奢...</p>",
@@ -148,4 +150,4 @@ curl -X DELETE http://localhost:37050/api/case/1
 | 5 | PUT | `/api/case/{id}` | 修改 |
 | 6 | DELETE | `/api/case/{id}` | 逻辑删除 |
 
-> 📋 待开发（小程序端）：`GET /api/case/list`（style/area 筛选）、`GET /api/case/detail/{id}`、`GET /api/case/featured`（首页前 6）
+> 📋 小程序端接口见 [case-c.md](./case-c.md)：`GET /api/cases`（style/area/layout 筛选）、`GET /api/cases/{id}`、`GET /api/cases/options`；首页精选见 [home.md](./home.md) 的 `/api/home/featured`。
