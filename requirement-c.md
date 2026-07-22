@@ -58,6 +58,8 @@
 |---|---|---|
 | `id` | Long | 主键 |
 | `userId` | Long | 微信用户 id，可为 null |
+| `name` | String | 用户姓名（PC 管理端接口返回，从 wx_user 关联） |
+| `phone` | String | 用户手机号（PC 管理端接口返回，从 wx_user 关联） |
 | `answers` | Object | 答卷内容 `{ questionId: value }` |
 | `createdAt` | String(Date) | 创建时间 |
 | `updatedAt` | String(Date) | 更新时间 |
@@ -190,6 +192,62 @@ curl -X DELETE "http://localhost:37050/api/requirement/results/1"
 
 ---
 
+### 6. PC 管理端·测评结果列表 `GET /api/requirement/admin/results`
+
+关联 wx_user 拿用户姓名/手机号，支持按姓名、手机号、提交日期筛选。
+
+| Query | 类型 | 默认 | 说明 |
+|---|---|---|---|
+| `name` | String | - | 按用户姓名模糊筛选 |
+| `phone` | String | - | 按手机号模糊筛选 |
+| `beginAt` | String | - | 提交起始日期（YYYY-MM-DD） |
+| `endAt` | String | - | 提交截止日期（YYYY-MM-DD） |
+| `page` | int | `1` | 页码 |
+| `pageSize` | int | `20` | 每页条数 |
+
+需权限：`crm:requirement:query`
+
+```bash
+curl "http://localhost:37050/api/requirement/admin/results?page=1&pageSize=20&name=张伟"
+```
+
+```json
+{
+  "code": 0,
+  "data": {
+    "list": [
+      {
+        "id": 1001,
+        "userId": "opz8Cxs...",
+        "name": "张伟",
+        "phone": "13812341234",
+        "answers": { "q1_renovation_type": "rough_new", "q2_area": "90_120" },
+        "createdAt": "2026-07-22T10:00:00",
+        "updatedAt": "2026-07-22T10:00:00"
+      }
+    ],
+    "total": 10,
+    "page": 1,
+    "pageSize": 20
+  },
+  "message": null
+}
+```
+
+---
+
+### 7. PC 管理端·测评结果详情 `GET /api/requirement/admin/results/{id}`
+
+需权限：`crm:requirement:query`
+
+```bash
+curl "http://localhost:37050/api/requirement/admin/results/1001"
+```
+
+响应：单条答卷完整数据，含 `name`、`phone`、`answers`。不存在 → `404`。
+
+---
+
 ## curl 速查
 
 ```bash
@@ -209,9 +267,15 @@ curl "http://localhost:37050/api/requirement/results/1"
 
 # 删除答卷
 curl -X DELETE "http://localhost:37050/api/requirement/results/1"
+
+# PC管理端·测评结果列表（支持 name/phone/beginAt/endAt 筛选）
+curl "http://localhost:37050/api/requirement/admin/results?page=1&pageSize=20"
+
+# PC管理端·测评结果详情
+curl "http://localhost:37050/api/requirement/admin/results/1001"
 ```
 
-## 接口清单（5 个）
+## 接口清单（7 个）
 
 | # | 方法 | 路径 | 功能 |
 |---|---|---|---|
@@ -220,5 +284,7 @@ curl -X DELETE "http://localhost:37050/api/requirement/results/1"
 | 3 | GET | `/api/requirement/results` | 我的答卷列表 |
 | 4 | GET | `/api/requirement/results/{id}` | 答卷详情 |
 | 5 | DELETE | `/api/requirement/results/{id}` | 删除答卷 |
+| 6 | GET | `/api/requirement/admin/results` | PC管理端·测评结果列表（关联用户，支持筛选） |
+| 7 | GET | `/api/requirement/admin/results/{id}` | PC管理端·测评结果详情（含用户姓名/手机号） |
 
 > 📋 关联：PC 端管理接口（分类/题目/选项 CRUD）见 [requirement.md](./requirement.md)，共 14 个端点。
