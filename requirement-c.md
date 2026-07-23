@@ -192,7 +192,13 @@ curl -X DELETE "http://localhost:37050/api/requirement/results/1"
 
 ---
 
-### 6. PC 管理端·测评结果列表 `GET /api/requirement/admin/results`
+### 6. PC 管理端·题目配置 `GET /api/requirement/admin/config`
+
+返回全量分类 + 题目 + 选项配置，供结果详情页渲染题目文案和选项标签。需权限：`crm:requirement:query`。返回结构同 [§1 全量题目配置](#1-全量题目配置-get-apirequirementconfig)。
+
+---
+
+### 7. PC 管理端·测评结果列表 `GET /api/requirement/admin/results`
 
 关联 wx_user 拿用户姓名/手机号，支持按姓名、手机号、提交日期筛选。
 
@@ -236,7 +242,7 @@ curl "http://localhost:37050/api/requirement/admin/results?page=1&pageSize=20&na
 
 ---
 
-### 7. PC 管理端·测评结果详情 `GET /api/requirement/admin/results/{id}`
+### 8. PC 管理端·测评结果详情 `GET /api/requirement/admin/results/{id}`
 
 需权限：`crm:requirement:query`
 
@@ -268,14 +274,15 @@ curl "http://localhost:37050/api/requirement/results/1"
 # 删除答卷
 curl -X DELETE "http://localhost:37050/api/requirement/results/1"
 
+# PC管理端·题目配置（渲染题目文案用）
+curl "http://localhost:37050/api/requirement/admin/config"
+
 # PC管理端·测评结果列表（支持 name/phone/beginAt/endAt 筛选）
 curl "http://localhost:37050/api/requirement/admin/results?page=1&pageSize=20"
-
-# PC管理端·测评结果详情
 curl "http://localhost:37050/api/requirement/admin/results/1001"
 ```
 
-## 接口清单（7 个）
+## 接口清单（8 个）
 
 | # | 方法 | 路径 | 功能 |
 |---|---|---|---|
@@ -284,7 +291,8 @@ curl "http://localhost:37050/api/requirement/admin/results/1001"
 | 3 | GET | `/api/requirement/results` | 我的答卷列表 |
 | 4 | GET | `/api/requirement/results/{id}` | 答卷详情 |
 | 5 | DELETE | `/api/requirement/results/{id}` | 删除答卷 |
-| 6 | GET | `/api/requirement/admin/results` | PC管理端·测评结果列表（关联用户，支持筛选） |
-| 7 | GET | `/api/requirement/admin/results/{id}` | PC管理端·测评结果详情（含用户姓名/手机号） |
+| 6 | GET | `/api/requirement/admin/config` | PC管理端·题目配置（渲染题目文案用） |
+| 7 | GET | `/api/requirement/admin/results` | PC管理端·测评结果列表（关联用户，支持筛选） |
+| 8 | GET | `/api/requirement/admin/results/{id}` | PC管理端·测评结果详情（含用户姓名/手机号） |
 
 > 📋 关联：PC 端管理接口（分类/题目/选项 CRUD）见 [requirement.md](./requirement.md)，共 14 个端点。
